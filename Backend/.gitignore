@@ -181,6 +181,8 @@ cython_debug/
 .cursorindexingignore
 
 temp.jpeg
-
+idea/
+.idea/
 .idea/*
-.idea
+../.idea/
+
