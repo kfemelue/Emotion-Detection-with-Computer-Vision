@@ -1,4 +1,4 @@
-from Schemas.emotion_detector import EmotionPredictor
+from Schema.emotion_detector import EmotionPredictor
 import base64
 
 
