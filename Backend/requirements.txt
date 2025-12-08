@@ -1,0 +1,12 @@
+# fast-api server dependencies
+fastapi[standard]
+python-dotenv
+requests
+uvicorn
+pydantic
+websockets
+
+# Py-feat and dependencies
+tables
+Numpy==1.23.5
+git+https://github.com/cosanlab/py-feat.git
