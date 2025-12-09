@@ -1,4 +1,5 @@
 import Chart from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie, Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 
@@ -10,7 +11,6 @@ function UploadPhoto() {
      * TODO: 
      * styling
      * status bar animation
-     * Chart debugging
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -19,37 +19,55 @@ function UploadPhoto() {
     const [loading, setLoading] = useState(false);
     const api_base_url = import.meta.env.api_url ?? "http://localhost:3000";
 
+    const chartOptions = {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 1
+            },
+        },
+        plugins: {
+            datalabels: {
+                display: true,
+                color: 'black',
+                anchor: 'end',
+                align: 'top',
+                formatter: (value, context) => {
+                    return value.toFixed(2); // Format the number
+                }
+            }
+        }
+    };
+
     let chartData;
+    let resultsHTML;
+
     if (analysisResult) {
-        console.log(analysisResult.anger)
         chartData = {
             labels: ['Anger', 'Disgust', 'Fear', 'Happiness', 'Sadness', 'Surprise', 'Neutral'],
             datasets: [
                 {
                     label: 'Detected Emotions',
                     data: [
-                        Number(100* analysisResult.anger),
-                        Number(100* analysisResult.disgust),
-                        Number(100* analysisResult.fear),
-                        Number(100* analysisResult.happiness),
-                        Number(100* analysisResult.sadness),
-                        Number(100* analysisResult.surprise),
-                        Number(100* analysisResult.neutral),
-                    ]
+                        Number(analysisResult['0'].anger),
+                        Number(analysisResult['0'].disgust),
+                        Number(analysisResult['0'].fear),
+                        Number(analysisResult['0'].happiness),
+                        Number(analysisResult['0'].sadness),
+                        Number(analysisResult['0'].surprise),
+                        Number(analysisResult['0'].neutral),
+                    ],
+                    minBarLength: 10
                 }
             ]
-        }
+        };
     }
-
-    console.log(chartData)
-
-    let resultsHTML;
 
     if (loading) {
         resultsHTML =
             <section>
-                <h4 className="results"> Loading Analysis Results </h4>
-                <p>progess bar blaceholder</p>
+                <h4 className="loading-message"> Loading Analysis Results </h4>
+                <p>progess bar placeholder</p>
             </section>;
 
     } else if (analysisResult) {
@@ -58,13 +76,12 @@ function UploadPhoto() {
                 <section>
                     <h6 className="results-header"> Analysis Results </h6>
                 </section>
-                <section>
+                <section className="chart-container">
                     < Bar
                         datasetIdKey={1}
                         data={chartData}
-                        options={{
-
-                        }}
+                        options={chartOptions}
+                        plugins={[ChartDataLabels]}
                     />
                 </section>
             </div>
@@ -138,7 +155,7 @@ function UploadPhoto() {
                 <section>
                     <section>
                         <label htmlFor="myfile">Upload an Image: </label>
-                        <input type="file" id="myfile" name="myfile" onChange={(event) => {
+                        <input type="file" id="myfile" name="myfile" onChange={ (event) => {
                             handleUpload(event)
                         }} />
                     </section>
