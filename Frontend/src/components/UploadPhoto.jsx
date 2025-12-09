@@ -3,8 +3,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie, Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 
-
-
 function UploadPhoto() {
 
     /**

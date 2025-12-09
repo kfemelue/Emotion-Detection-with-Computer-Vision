@@ -14,9 +14,10 @@ pip install -r requirements.txt
 2. Create a .env file based on .env.example or the text below, and fill in the desired port number credentials.
 
 ```commandline
-
-ORIGINS=["http://localhost"]
+PYTHON_VERSION=3.9.25
 PORT=3000
+# CORS origins
+ORIGINS=["http://localhost"]
 
 ```
 
