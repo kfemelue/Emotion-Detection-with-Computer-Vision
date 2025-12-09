@@ -13,5 +13,5 @@ class EmotionPredictor:
     async def get_emotions_dict(self):
         predictions = await self.get_predictions_df()
         emotions_dict = (predictions[["anger", "disgust", "fear", "happiness", "sadness", "surprise", "neutral"]]
-                         .to_dict())
+                         .to_dict(orient='records'))
         return emotions_dict
