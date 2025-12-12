@@ -15,7 +15,7 @@ function UploadPhoto() {
     const [analysisResult, setAnalysisResult] = useState(null);
     const [fileError, setFileError] = useState('');
     const [loading, setLoading] = useState(false);
-    const api_base_url = import.meta.env.api_url ?? "http://localhost:3000";
+    const api_base_url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
     const chartOptions = {
         scales: {
@@ -135,7 +135,10 @@ function UploadPhoto() {
                 }
             }
 
-            const request = await fetch(`${api_base_url}/analyze`, options);
+            const url = await `${api_base_url}/analyze`
+            console.log(url)
+
+            const request = await fetch("http://localhost:3000/analyze", options);
             const response = await request.json();
             const data = await JSON.parse(response);
 
