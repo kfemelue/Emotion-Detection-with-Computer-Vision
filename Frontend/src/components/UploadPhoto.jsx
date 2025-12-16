@@ -10,6 +10,7 @@ function UploadPhoto() {
      * styling
      * status bar animation
      * decide on best chart to visualize them based on rational value of emotions preset
+     * handle NAN results from Pyfeat, error message display to user that human images are needed?, etc
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -41,19 +42,19 @@ function UploadPhoto() {
     let chartData;
     let resultsHTML;
     let words;
-    let wordsHTML=[];
+    let wordsHTML = [];
 
     if (analysisResult) {
-        words = [{key: 'Anger', value: Number(analysisResult['0'].anger) },
-            {key: 'Disgust', value: Number(analysisResult['0'].disgust) },
-            {key: 'Fear', value: Number(analysisResult['0'].fear) },
-            {key: 'Happiness', value: Number(analysisResult['0'].happiness) },
-            {key: 'Sadness', value: Number(analysisResult['0'].sadness) },
-            {key: 'Surprise', value: Number(analysisResult['0'].surprise) },
-            {key: 'Neutral', value: Number(analysisResult['0'].neutral) }
+        words = [{ key: 'Anger', value: Number(analysisResult['0'].anger) },
+        { key: 'Disgust', value: Number(analysisResult['0'].disgust) },
+        { key: 'Fear', value: Number(analysisResult['0'].fear) },
+        { key: 'Happiness', value: Number(analysisResult['0'].happiness) },
+        { key: 'Sadness', value: Number(analysisResult['0'].sadness) },
+        { key: 'Surprise', value: Number(analysisResult['0'].surprise) },
+        { key: 'Neutral', value: Number(analysisResult['0'].neutral) }
         ]
 
-        for (let i = 0; i < words.length; i++){
+        for (let i = 0; i < words.length; i++) {
             let row = <tr key={i}>
                 <td> {words[i].key} </td>
                 <td> {words[i].value} </td>
@@ -96,11 +97,13 @@ function UploadPhoto() {
                 </section>
                 <section className="results-table">
                     <table>
-                        <tr>
-                            <th>Emotion</th>
-                            <th>Likelihood</th>
-                        </tr>
-                        {wordsHTML}
+                        <tbody>
+                            <tr>
+                                <th>Emotion</th>
+                                <th>Likelihood</th>
+                            </tr>
+                            {wordsHTML}
+                        </tbody>
                     </table>
                 </section>
                 <section className="chart-container">
@@ -185,7 +188,7 @@ function UploadPhoto() {
                 <section className='upload-section'>
                     <section className='upload-input-container'>
                         <label htmlFor="myfile">Upload an Image: </label>
-                        <input type="file" id="myfile" name="myfile" onChange={ (event) => {
+                        <input type="file" id="myfile" name="myfile" onChange={(event) => {
                             handleUpload(event)
                         }} />
                     </section>
