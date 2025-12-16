@@ -9,6 +9,7 @@ function UploadPhoto() {
      * TODO: 
      * styling
      * status bar animation
+     * decide on best chart to visualize them based on rational value of emotions preset
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -39,13 +40,32 @@ function UploadPhoto() {
 
     let chartData;
     let resultsHTML;
+    let words;
+    let wordsHTML=[];
 
     if (analysisResult) {
+        words = [{key: 'Anger', value: Number(analysisResult['0'].anger) },
+            {key: 'Disgust', value: Number(analysisResult['0'].disgust) },
+            {key: 'Fear', value: Number(analysisResult['0'].fear) },
+            {key: 'Happiness', value: Number(analysisResult['0'].happiness) },
+            {key: 'Sadness', value: Number(analysisResult['0'].sadness) },
+            {key: 'Surprise', value: Number(analysisResult['0'].surprise) },
+            {key: 'Neutral', value: Number(analysisResult['0'].neutral) }
+        ]
+
+        for (let i = 0; i < words.length; i++){
+            let row = <tr key={i}>
+                <td> {words[i].key} </td>
+                <td> {words[i].value} </td>
+            </tr>
+            wordsHTML.push(row)
+        }
+
         chartData = {
             labels: ['Anger', 'Disgust', 'Fear', 'Happiness', 'Sadness', 'Surprise', 'Neutral'],
             datasets: [
                 {
-                    label: 'Detected Emotions',
+                    label: 'Likelihood that Emotion is Present',
                     data: [
                         Number(analysisResult['0'].anger),
                         Number(analysisResult['0'].disgust),
@@ -73,6 +93,15 @@ function UploadPhoto() {
             <div>
                 <section>
                     <h6 className="results-header"> Analysis Results </h6>
+                </section>
+                <section className="results-table">
+                    <table>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Likelihood</th>
+                        </tr>
+                        {wordsHTML}
+                    </table>
                 </section>
                 <section className="chart-container">
                     < Bar
@@ -152,28 +181,28 @@ function UploadPhoto() {
 
     return (
         <div>
-            <main>
-                <section>
-                    <section>
+            <main className='upload-container'>
+                <section className='upload-section'>
+                    <section className='upload-input-container'>
                         <label htmlFor="myfile">Upload an Image: </label>
                         <input type="file" id="myfile" name="myfile" onChange={ (event) => {
                             handleUpload(event)
                         }} />
                     </section>
-                    <section>
-                        <p>We do not keep your files or data.</p>
+                    <section className='upload-disclaimer-container'>
+                        <p id='upload-disclaimer-text'>We do not keep your files or data.</p>
                     </section>
                 </section>
                 <section className="uploaded-image-container">
-                    <p>Image: </p>
-                    <img className="display-img" src={base64ImgUpload ? base64ImgUpload : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="User uploaded Image" />
+                    <p id="image-label" >Image: </p>
+                    <img id="displayed-image" src={base64ImgUpload ? base64ImgUpload : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="User uploaded Image" />
                 </section>
-                <section>
+                <section >
                     <button onClick={() => {
                         handleSubmit();
                     }}> Analyze </button>
                 </section>
-                <section>
+                <section className='results-container'>
                     {resultsHTML}
                 </section>
             </main>
