@@ -17,6 +17,7 @@ function UploadPhoto() {
     const [analysisResult, setAnalysisResult] = useState(null);
     const [fileError, setFileError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [progress, setProgress] = useState(0)
     const api_base_url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
     const chartOptions = {
@@ -86,7 +87,10 @@ function UploadPhoto() {
         resultsHTML =
             <section>
                 <h4 id="loading-message"> Loading Analysis Results </h4>
-                <p>progess bar placeholder</p>
+                {/* <p>progess bar placeholder</p> */}
+                <div id="progress-container">
+                    <div id="progress-bar" style={{ width: `${progress}%` }}></div>
+                </div>
             </section>;
 
     } else if (analysisResult) {
@@ -157,6 +161,12 @@ function UploadPhoto() {
 
         if (base64ImgUpload) {
             await setLoading(true);
+            await setProgress(0);
+
+            const timer = setInterval(()=>{
+                setProgress( (p)=> (p < 90 ? p + 10: p) )
+            }, 300);
+
             const body = {
                 timestamp_ms: await Date.now(),
                 base64: base64ImgUpload
@@ -166,7 +176,8 @@ function UploadPhoto() {
                 "method": "POST",
                 "body": await JSON.stringify(body),
                 "headers": {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                     'Access-Control-Allow-Origin': '*'
                 }
             }
 
@@ -178,6 +189,7 @@ function UploadPhoto() {
             const data = await JSON.parse(response);
 
             await setAnalysisResult(data);
+            await clearInterval(timer)
             await setLoading(false);
 
         } else {
