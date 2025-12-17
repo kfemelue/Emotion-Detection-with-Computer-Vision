@@ -52,7 +52,7 @@ function UploadPhoto() {
         { key: 'Sadness', value: Number(analysisResult['0'].sadness) },
         { key: 'Surprise', value: Number(analysisResult['0'].surprise) },
         { key: 'Neutral', value: Number(analysisResult['0'].neutral) }
-        ]
+        ];
 
         for (let i = 0; i < words.length; i++) {
             let row = <tr key={i}>
@@ -66,7 +66,7 @@ function UploadPhoto() {
             labels: ['Anger', 'Disgust', 'Fear', 'Happiness', 'Sadness', 'Surprise', 'Neutral'],
             datasets: [
                 {
-                    label: 'Likelihood that Emotion is Present',
+                    label: 'Likelihood that Emotion is Present in Photo',
                     data: [
                         Number(analysisResult['0'].anger),
                         Number(analysisResult['0'].disgust),
@@ -85,36 +85,40 @@ function UploadPhoto() {
     if (loading) {
         resultsHTML =
             <section>
-                <h4 className="loading-message"> Loading Analysis Results </h4>
+                <h4 id="loading-message"> Loading Analysis Results </h4>
                 <p>progess bar placeholder</p>
             </section>;
 
     } else if (analysisResult) {
         resultsHTML =
-            <div>
+            <section id="analysis-container">
                 <section>
-                    <h6 className="results-header"> Analysis Results </h6>
+                    <h3 id="results-header"> Analysis Results </h3>
                 </section>
-                <section className="results-table">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>Emotion</th>
-                                <th>Likelihood</th>
-                            </tr>
-                            {wordsHTML}
-                        </tbody>
-                    </table>
+                <section id="results-container">
+                    <section id="results-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Emotion</th>
+                                    <th>Likelihood</th>
+                                </tr>
+                                {wordsHTML}
+                            </tbody>
+                        </table>
+                    </section>
+                    <section className="chart-container">
+                        < Bar
+                            datasetIdKey={1}
+                            data={chartData}
+                            options={chartOptions}
+                            plugins={[ChartDataLabels]}
+                        />
+                    </section>
+
+
                 </section>
-                <section className="chart-container">
-                    < Bar
-                        datasetIdKey={1}
-                        data={chartData}
-                        options={chartOptions}
-                        plugins={[ChartDataLabels]}
-                    />
-                </section>
-            </div>
+            </section>;
     } else {
         resultsHTML = <p>results will be here</p>
     }
@@ -151,7 +155,6 @@ function UploadPhoto() {
 
     const handleSubmit = async (event) => {
 
-
         if (base64ImgUpload) {
             await setLoading(true);
             const body = {
@@ -184,28 +187,26 @@ function UploadPhoto() {
 
     return (
         <div>
-            <main className='upload-container'>
-                <section className='upload-section'>
-                    <section className='upload-input-container'>
-                        <label htmlFor="myfile">Upload an Image: </label>
-                        <input type="file" id="myfile" name="myfile" onChange={(event) => {
+            <main id='upload-container'>
+                <section id='upload-section'>
+                    <section id='input-container'>
+                        {/* <label htmlFor="myfile">Upload an Image: </label> */}
+                        <input type="file" id="file-input" name="myfile" onChange={(event) => {
                             handleUpload(event)
                         }} />
-                    </section>
-                    <section className='upload-disclaimer-container'>
-                        <p id='upload-disclaimer-text'>We do not keep your files or data.</p>
+                        {/* <p id='upload-disclaimer-text'>We do not keep your files or data.</p> */}
                     </section>
                 </section>
-                <section className="uploaded-image-container">
-                    <p id="image-label" >Image: </p>
+                <section id="uploaded-image-container">
+                    {/* <p id="image-label"> Image: </p> */}
                     <img id="displayed-image" src={base64ImgUpload ? base64ImgUpload : "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="User uploaded Image" />
                 </section>
-                <section >
-                    <button onClick={() => {
+                <section id="submit-button-container">
+                    <button id="submit-button" onClick={() => {
                         handleSubmit();
                     }}> Analyze </button>
                 </section>
-                <section className='results-container'>
+                <section id='results-container'>
                     {resultsHTML}
                 </section>
             </main>

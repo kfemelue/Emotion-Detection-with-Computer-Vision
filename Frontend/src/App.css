@@ -1,4 +1,85 @@
-.display-img {
-  width: 20%;
-  height: 20%
+body {
+  font-family: 'Tahoma';
+  justify-content: center;
+}
+
+/* File input */
+#upload-container {
+  width: auto;
+  height: auto;
+  justify-content: center;
+}
+
+#input-container {
+
+}
+
+#file-input {
+  font-family: 'Tahoma';
+}
+
+/* Analysis Results */
+#results-header {
+
+}
+
+#header {
+  text-align: center;
+}
+
+#analysis-container {
+  text-align: center;
+}
+
+#results-container {
+  display: flex;
+  justify-content: center;
+}
+
+#results-table {
+  border-style: solid;
+  border-radius: 3%;
+  padding: 3%;
+  margin: 3%;
+}
+
+.chart-container {
+  border-style: solid;
+  border-radius: 3%;
+  padding: 3%;
+  margin: 3%;
+}
+
+#upload-section {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+}
+
+#upload-disclaimer-text {
+  font-size: 1em;
+}
+
+#uploaded-image-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* Image Display */
+#image-label {
+
+}
+
+#displayed-image {
+  margin:3%;
+  width: 30%;
+  height: 30%;
+  border-style: solid;
+  border-radius: 2%;
+}
+
+#submit-button-container {
+  display: flex;
+  justify-content: center;
 }
