@@ -7,17 +7,16 @@ function UploadPhoto() {
 
     /**
      * TODO: 
-     * styling
-     * status bar animation
      * decide on best chart to visualize them based on rational value of emotions preset
      * handle NAN results from Pyfeat, error message display to user that human images are needed?, etc
+     * Text to explain analysis, describe most likely emotion in image
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
     const [analysisResult, setAnalysisResult] = useState(null);
     const [fileError, setFileError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(0);
     const api_base_url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
     const chartOptions = {
@@ -128,6 +127,10 @@ function UploadPhoto() {
     }
 
     const handleUpload = async (event) => {
+        if (base64ImgUpload !==''){
+            setBase64ImgUpload('');
+        }
+
         const now = await Date.now();
         const file = event.target.files[0]
         const reader = new FileReader();

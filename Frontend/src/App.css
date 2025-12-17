@@ -29,6 +29,8 @@ body {
 
 #analysis-container {
   text-align: center;
+  width: 100%;
+  height: 60%;
 }
 
 #results-container {
@@ -41,6 +43,8 @@ body {
   border-radius: 3%;
   padding: 3%;
   margin: 3%;
+  height: auto;
+  width: auto;
 }
 
 .chart-container {
@@ -48,6 +52,8 @@ body {
   border-radius: 3%;
   padding: 3%;
   margin: 3%;
+  height: auto;
+  width: auto;
 }
 
 #upload-section {
@@ -83,6 +89,8 @@ body {
   display: flex;
   justify-content: center;
 }
+
+/* Progress Bar */
 
 #progress-container {
 width: 100%;
