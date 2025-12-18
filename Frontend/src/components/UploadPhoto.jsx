@@ -9,6 +9,7 @@ function UploadPhoto() {
      * TODO: 
      * decide on best chart to visualize them based on rational value of emotions preset
      * handle NAN results from Pyfeat, error message display to user that human images are needed?, etc
+     * handle server errors
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -17,7 +18,7 @@ function UploadPhoto() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState(null);
-    const api_base_url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+    const api_base_url = import.meta.env.VITE_API_URL;
 
     const chartOptions = {
         scales: {
