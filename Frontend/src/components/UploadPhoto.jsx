@@ -18,7 +18,16 @@ function UploadPhoto() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState(null);
-    const api_base_url = import.meta.env.VITE_API_URL;
+
+    let api_base_url;
+    
+    if (import.meta.env.VITE_DEPLOY_ENVIRONMENT == "prod") {
+        api_base_url = import.meta.env.VITE_PROD_API_URL;
+    } else if (import.meta.env.VITE_DEPLOY_ENVIRONMENT == "dev"){
+        api_base_url = import.meta.env.VITE_DEV_API_URL;
+    }
+
+    
 
     const chartOptions = {
         scales: {
@@ -200,7 +209,6 @@ function UploadPhoto() {
             }
 
             const url = await `${api_base_url}/analyze`;
-            await console.log(url);
 
             try {
                 const request = await fetch(url, options);
