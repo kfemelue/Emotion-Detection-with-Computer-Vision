@@ -18,6 +18,11 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
 @app.post("/analyze")
 async def analyze_photo(photo: Photo):
     data = photo.base64
