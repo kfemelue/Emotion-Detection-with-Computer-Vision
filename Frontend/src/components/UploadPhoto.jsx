@@ -3,13 +3,13 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie, Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 
-async function UploadPhoto() {
+function UploadPhoto() {
 
     /**
      * TODO: 
      * decide on best chart to visualize them based on rational value of emotions preset
      * handle NAN results from Pyfeat, error message display to user that human images are needed?, etc
-     * handle server errors
+     * 
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -18,7 +18,7 @@ async function UploadPhoto() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState(null);
-    const api_base_url = await import.meta.env.VITE_API_URL;
+    const api_base_url = import.meta.env.VITE_API_URL;
 
     const chartOptions = {
         scales: {
@@ -46,10 +46,10 @@ async function UploadPhoto() {
     let emotionsHTML = [];
 
     if (analysisResult) {
-        if ( analysisResult['0'].anger==NaN ) {
-            setFileError('No Emotions were detected in image, please upload a file with a face featured in it')
+        // if ( analysisResult['0'].anger==NaN ) {
+        //     setFileError('No Emotions were detected in image, please upload a file with a face featured in it')
 
-        }
+        // }
 
         emotions = [{ key: 'Anger', value: Number(analysisResult['0'].anger) ?? 0 },
         { key: 'Disgust', value: Number(analysisResult['0'].disgust) ?? 0 },
@@ -199,10 +199,11 @@ async function UploadPhoto() {
                 }
             }
 
-            const url = await `${api_base_url}/analyze`
+            const url = await `${api_base_url}/analyze`;
+            await console.log(url);
 
             try {
-                const request = await fetch("http://localhost:3000/analyze", options);
+                const request = await fetch(url, options);
                 const response = await request.json();
                 const data = await JSON.parse(response);
                 await setAnalysisResult(data);
