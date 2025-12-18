@@ -3,7 +3,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie, Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 
-function UploadPhoto() {
+async function UploadPhoto() {
 
     /**
      * TODO: 
@@ -18,7 +18,7 @@ function UploadPhoto() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState(null);
-    const api_base_url = import.meta.env.VITE_API_URL;
+    const api_base_url = await import.meta.env.VITE_API_URL;
 
     const chartOptions = {
         scales: {
@@ -46,6 +46,11 @@ function UploadPhoto() {
     let emotionsHTML = [];
 
     if (analysisResult) {
+        if ( analysisResult['0'].anger==NaN ) {
+            setFileError('No Emotions were detected in image, please upload a file with a face featured in it')
+
+        }
+
         emotions = [{ key: 'Anger', value: Number(analysisResult['0'].anger) ?? 0 },
         { key: 'Disgust', value: Number(analysisResult['0'].disgust) ?? 0 },
         { key: 'Fear', value: Number(analysisResult['0'].fear) ?? 0 },
