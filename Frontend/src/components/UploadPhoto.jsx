@@ -9,7 +9,6 @@ function UploadPhoto() {
      * TODO: 
      * decide on best chart to visualize them based on rational value of emotions preset
      * handle NAN results from Pyfeat, error message display to user that human images are needed?, etc
-     * Text to explain analysis, describe most likely emotion in image
      */
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
@@ -17,6 +16,7 @@ function UploadPhoto() {
     const [fileError, setFileError] = useState('');
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [apiError, setApiError] = useState(null);
     const api_base_url = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
     const chartOptions = {
@@ -41,40 +41,40 @@ function UploadPhoto() {
 
     let chartData;
     let resultsHTML;
-    let words;
-    let wordsHTML = [];
+    let emotions;
+    let emotionsHTML = [];
 
     if (analysisResult) {
-        words = [{ key: 'Anger', value: Number(analysisResult['0'].anger) },
-        { key: 'Disgust', value: Number(analysisResult['0'].disgust) },
-        { key: 'Fear', value: Number(analysisResult['0'].fear) },
-        { key: 'Happiness', value: Number(analysisResult['0'].happiness) },
-        { key: 'Sadness', value: Number(analysisResult['0'].sadness) },
-        { key: 'Surprise', value: Number(analysisResult['0'].surprise) },
-        { key: 'Neutral', value: Number(analysisResult['0'].neutral) }
+        emotions = [{ key: 'Anger', value: Number(analysisResult['0'].anger) ?? 0 },
+        { key: 'Disgust', value: Number(analysisResult['0'].disgust) ?? 0 },
+        { key: 'Fear', value: Number(analysisResult['0'].fear) ?? 0 },
+        { key: 'Happiness', value: Number(analysisResult['0'].happiness) ?? 0 },
+        { key: 'Sadness', value: Number(analysisResult['0'].sadness) ?? 0 },
+        { key: 'Surprise', value: Number(analysisResult['0'].surprise) ?? 0 },
+        { key: 'Neutral', value: Number(analysisResult['0'].neutral) ?? 0 }
         ];
 
-        for (let i = 0; i < words.length; i++) {
+        for (let i = 0; i < emotions.length; i++) {
             let row = <tr key={i}>
-                <td> {words[i].key} </td>
-                <td> {words[i].value} </td>
+                <td> {emotions[i].key} </td>
+                <td> {emotions[i].value} </td>
             </tr>
-            wordsHTML.push(row)
+            emotionsHTML.push(row)
         }
 
         chartData = {
             labels: ['Anger', 'Disgust', 'Fear', 'Happiness', 'Sadness', 'Surprise', 'Neutral'],
             datasets: [
                 {
-                    label: 'Likelihood that Emotion is Present in Photo',
+                    label: 'Emotion Presence Likelihood',
                     data: [
-                        Number(analysisResult['0'].anger),
-                        Number(analysisResult['0'].disgust),
-                        Number(analysisResult['0'].fear),
-                        Number(analysisResult['0'].happiness),
-                        Number(analysisResult['0'].sadness),
-                        Number(analysisResult['0'].surprise),
-                        Number(analysisResult['0'].neutral),
+                        Number(analysisResult['0'].anger) ?? 0,
+                        Number(analysisResult['0'].disgust) ?? 0,
+                        Number(analysisResult['0'].fear) ?? 0,
+                        Number(analysisResult['0'].happiness) ?? 0,
+                        Number(analysisResult['0'].sadness) ?? 0,
+                        Number(analysisResult['0'].surprise) ?? 0,
+                        Number(analysisResult['0'].neutral) ?? 0,
                     ],
                     minBarLength: 10
                 }
@@ -86,13 +86,17 @@ function UploadPhoto() {
         resultsHTML =
             <section>
                 <h4 id="loading-message"> Loading Analysis Results </h4>
-                {/* <p>progess bar placeholder</p> */}
                 <div id="progress-container">
                     <div id="progress-bar" style={{ width: `${progress}%` }}></div>
                 </div>
             </section>;
 
     } else if (analysisResult) {
+
+        const sortedEmotions = emotions.sort( (a,b) => {
+            return b.value - a.value
+        })
+
         resultsHTML =
             <section id="analysis-container">
                 <section>
@@ -106,7 +110,7 @@ function UploadPhoto() {
                                     <th>Emotion</th>
                                     <th>Likelihood</th>
                                 </tr>
-                                {wordsHTML}
+                                {emotionsHTML}
                             </tbody>
                         </table>
                     </section>
@@ -118,16 +122,22 @@ function UploadPhoto() {
                             plugins={[ChartDataLabels]}
                         />
                     </section>
-
-
+                </section>
+                <section id='results-explanation'>
+                    <p>
+                        The top three most likely emotions in the photo are: 
+                        <br></br> {sortedEmotions[0].key} with a probability of {sortedEmotions[0].value}, 
+                        <br></br> {sortedEmotions[1].key} with a probability of {sortedEmotions[1].value}, and 
+                        <br></br> {sortedEmotions[2].key} with a probability of {sortedEmotions[2].value}.
+                    </p>
                 </section>
             </section>;
     } else {
-        resultsHTML = <p>results will be here</p>
+        resultsHTML = <p></p>
     }
 
     const handleUpload = async (event) => {
-        if (base64ImgUpload !==''){
+        if (base64ImgUpload !== '') {
             setBase64ImgUpload('');
         }
 
@@ -150,7 +160,6 @@ function UploadPhoto() {
 
         } else if (file && (!allowedTypes.includes(file.type))) {
             setFileError("Error: File type must be jpeg or png.")
-
         } else if (file && (file.size > maxSizeMB * 1024 * 1024)) {
             setFileError("Error: The maximum file size allowed is 5 MB.")
         } else {
@@ -166,8 +175,8 @@ function UploadPhoto() {
             await setLoading(true);
             await setProgress(0);
 
-            const timer = setInterval(()=>{
-                setProgress( (p)=> (p < 90 ? p + 10: p) )
+            const timer = setInterval(() => {
+                setProgress((p) => (p < 90 ? p + 10 : p))
             }, 300);
 
             const body = {
@@ -180,23 +189,28 @@ function UploadPhoto() {
                 "body": await JSON.stringify(body),
                 "headers": {
                     "Content-Type": "application/json",
-                     'Access-Control-Allow-Origin': '*'
+                    "Access-Control-Allow-Origin": "*"
                 }
             }
 
             const url = await `${api_base_url}/analyze`
-            console.log(url)
 
-            const request = await fetch("http://localhost:3000/analyze", options);
-            const response = await request.json();
-            const data = await JSON.parse(response);
+            try {
+                const request = await fetch("http://localhost:3000/analyze", options);
+                const response = await request.json();
+                const data = await JSON.parse(response);
+                await setAnalysisResult(data);
 
-            await setAnalysisResult(data);
-            await clearInterval(timer)
-            await setLoading(false);
+            } catch (e) {
+                await console.error(e)
+                await setApiError(e.message)
+            } finally {
+                await clearInterval(timer)
+                await setLoading(false);
+            }
 
         } else {
-            console.log("no file uploaded")
+            setFileError("Error: Please select a file.")
         }
     }
 
@@ -204,6 +218,9 @@ function UploadPhoto() {
         <div>
             <main id='upload-container'>
                 <section id='upload-section'>
+                    <section className='description-container'>
+                        <p id='description-text'>Upload a Photo of a human face for analysis</p>
+                    </section>
                     <section id='input-container'>
                         {/* <label htmlFor="myfile">Upload an Image: </label> */}
                         <input type="file" id="file-input" name="myfile" onChange={(event) => {
@@ -211,6 +228,10 @@ function UploadPhoto() {
                         }} />
                         {/* <p id='upload-disclaimer-text'>We do not keep your files or data.</p> */}
                     </section>
+                    <section className='description-container'>
+                        <p id='description-text' style={{color: 'red'}}>{fileError}</p>
+                    </section>
+
                 </section>
                 <section id="uploaded-image-container">
                     {/* <p id="image-label"> Image: </p> */}
