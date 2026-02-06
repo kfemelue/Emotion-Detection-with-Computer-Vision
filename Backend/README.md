@@ -24,5 +24,5 @@ ORIGINS=["http://localhost", "*"]
 3. Start the server in dev mode locally:
 
 ```commandline
- python -m uvicorn api.main:app --reload --port 3000
+ python -m uvicorn main:app --reload --port 3000
 ```

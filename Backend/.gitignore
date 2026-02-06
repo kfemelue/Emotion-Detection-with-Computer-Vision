@@ -186,3 +186,9 @@ idea/
 .idea/*
 ../.idea/
 
+env
+
+venv
+
+env/*
+venv/*
