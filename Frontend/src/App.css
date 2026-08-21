@@ -1,6 +1,7 @@
 body {
   font-family: 'Tahoma';
   justify-content: center;
+  background-color:aliceblue;
 }
 
 /* File input */
@@ -73,8 +74,8 @@ body {
 
 #displayed-image {
   margin: 3%;
-  width: 30%;
-  height: 30%;
+  width: 250px;
+  height: 250px;
   border-style: solid;
   border-radius: 2%;
 }
