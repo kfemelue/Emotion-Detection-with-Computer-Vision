@@ -10,4 +10,5 @@ VITE_API_URL=
 
 To run the React frontend on a local server:
 1. cd into the `Frontend` directory
-2. use `npm run dev` as a start command.
+2. run `npm install -y` to install app dependencies
+3. run `npm run dev` as a start command.
