@@ -26,5 +26,5 @@ Instructions to run the application locally, and dev environment requirements ca
 ## Sample Results
 
 ![Screenshot of Application 1](./images/image_1.png)
-![Screenshot of Application 1](./images/image_2.png)
-![Screenshot of Application 1](./images/image_3.png)
+![Screenshot of Application 2](./images/image_2.png)
+![Screenshot of Application 3](./images/image_3.png)
