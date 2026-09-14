@@ -177,6 +177,7 @@ function UploadPhoto() {
                     throw new Error("Error: Please select a file.");
 
                 } else {
+                    
                     reader.onload = (e) =>{
                         setBase64ImgUpload(e.target.result)
                     }
@@ -184,7 +185,9 @@ function UploadPhoto() {
                     reader.onerror = (e) =>{
                         console.error(e)
                     }
-                    
+
+                    reader.readAsDataURL(file);
+
                 }
             } 
 
@@ -197,7 +200,7 @@ function UploadPhoto() {
 
     const handleSubmit = async (event) => {
 
-        if (base64ImgUpload && fileError===false) {
+        if (base64ImgUpload) {
             setLoading(true);
             setProgress(0);
 

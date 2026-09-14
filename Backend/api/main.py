@@ -24,11 +24,14 @@ def read_root():
 
 @app.post("/analyze")
 async def analyze_photo(photo: Photo):
-    id = uuid.uuid7()
-    data = photo.base64
-    await emotions.decode_image(data)
-    predictions = await emotions.get_predictions_from_image(f"./temp_{id}.jpeg")
-    results = await predictions.get_emotions_dict()
-    os.remove(f"./temp_{id}.jpeg")
+    try:
+        uid = uuid.uuid4()
+        data = photo.base64
+        await emotions.decode_image(data, uid)
+        predictions = await emotions.get_predictions_from_image(f"./temp_{uid}.jpeg")
+        results = await predictions.get_emotions_dict()
+        os.remove(f"./temp_{uid}.jpeg")
+        return results
+    except Exception as e:
+        print(e)
     # return json.dumps(results)
-    return results

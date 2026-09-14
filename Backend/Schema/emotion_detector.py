@@ -1,11 +1,11 @@
-from feat import Detector
+from feat import Detectorv1
 
 
 class EmotionPredictor:
     def __init__(self, image_file_path, data_type):
         self.image = image_file_path
         self.data_type = data_type
-        self.image_detector = Detector().detect(self.image, data_type=self.data_type) #
+        self.image_detector = Detectorv1().detect(self.image, data_type=self.data_type) #
 
     async def get_predictions_df(self):
         return self.image_detector

@@ -9,4 +9,5 @@ pydantic
 # Py-feat and dependencies
 tables
 numpy
-git+https://github.com/cosanlab/py-feat.git
+#git+https://github.com/cosanlab/py-feat.git
+py-feat
