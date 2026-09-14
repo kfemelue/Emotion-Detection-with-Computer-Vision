@@ -19,7 +19,7 @@ pip install -r requirements.txt --only-binary :all:
 
 ```
 PYTHON_VERSION=3.13
-PORT=3000
+PORT=8000
 # CORS origins
 ORIGINS='["http://localhost", "*"]'
 
@@ -28,7 +28,7 @@ ORIGINS='["http://localhost", "*"]'
 4. Start the server in dev mode locally:
 
 ```commandline
- python -m uvicorn api.main:app --reload --port 3000
+ python -m uvicorn api.main:app --reload --port 8000
 ```
 
 ---
@@ -40,7 +40,7 @@ To run the app with Docker:
 3. Create a .env file in the Backend directory:
 
 ```
-PORT=3000
+PORT=8000
 # CORS origins
 ORIGINS='["http://localhost", "*"]'
 ```
