@@ -1,10 +1,10 @@
 import os
-import json
+import uuid
 from dotenv import load_dotenv
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from Models.photo_model import Photo
-import Services.emotion_service as emotions
+from models.photo_model import Photo
+import services.emotion_service as emotions
 
 load_dotenv(".env")
 app = FastAPI()
@@ -17,7 +17,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -25,9 +24,11 @@ def read_root():
 
 @app.post("/analyze")
 async def analyze_photo(photo: Photo):
+    id = uuid.uuid7()
     data = photo.base64
     await emotions.decode_image(data)
-    predictions = await emotions.get_predictions_from_image("./temp.jpeg")
+    predictions = await emotions.get_predictions_from_image(f"./temp_{id}.jpeg")
     results = await predictions.get_emotions_dict()
-    os.remove("./temp.jpeg")
-    return json.dumps(results)
+    os.remove(f"./temp_{id}.jpeg")
+    # return json.dumps(results)
+    return results

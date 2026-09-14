@@ -1,6 +1,6 @@
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Pie, Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
 
 function UploadPhoto() {
@@ -14,7 +14,7 @@ function UploadPhoto() {
 
     const [base64ImgUpload, setBase64ImgUpload] = useState('');
     const [analysisResult, setAnalysisResult] = useState(null);
-    const [fileError, setFileError] = useState('');
+    const [fileError, setFileError] = useState(true);
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [apiError, setApiError] = useState(null);
@@ -147,8 +147,8 @@ function UploadPhoto() {
                     </p>
                 </section>
             </section>;
-    } else {
-        resultsHTML = <p></p>
+    } else if (apiError){
+        resultsHTML = <p>Error: {apiError.message}</p>
     }
 
     const handleUpload = async (event) => {
@@ -156,29 +156,40 @@ function UploadPhoto() {
             setBase64ImgUpload('');
         }
 
-        const now = await Date.now();
+        const now = Date.now();
         const file = event.target.files[0]
         const reader = new FileReader();
         const allowedTypes = ['image/jpeg', 'image/png'];
         const maxSizeMB = 5;
 
-        if (file && !fileError) {
-            reader.onload = async (e) => {
-                await setBase64ImgUpload(e.target.result)
-            }
+        try {
+            if (file){
+                if (!allowedTypes.includes(file.type)) {
+                    setFileError("Error: File type must be jpeg or png.");
+                    throw new Error("Error: File type must be jpeg or png.");
 
-            reader.onerror = async (e) => {
+                } else if (file.size > maxSizeMB * 1024 * 1024) {
+                    setFileError("Error: The maximum file size allowed is 5 MB.");
+                    throw new Error("Error: The maximum file size allowed is 5 MB.");
+
+                } else if (!file) {
+                    setFileError("Error: Please select a file.");
+                    throw new Error("Error: Please select a file.");
+
+                } else {
+                    reader.onload = (e) =>{
+                        setBase64ImgUpload(e.target.result)
+                    }
+
+                    reader.onerror = (e) =>{
+                        console.error(e)
+                    }
+                    
+                }
+            } 
+
+        } catch (e){
                 console.error(e)
-            }
-
-            reader.readAsDataURL(file);
-
-        } else if (file && (!allowedTypes.includes(file.type))) {
-            setFileError("Error: File type must be jpeg or png.")
-        } else if (file && (file.size > maxSizeMB * 1024 * 1024)) {
-            setFileError("Error: The maximum file size allowed is 5 MB.")
-        } else {
-            setFileError("Error: Please select a file.")
         }
 
     }
@@ -186,16 +197,16 @@ function UploadPhoto() {
 
     const handleSubmit = async (event) => {
 
-        if (base64ImgUpload) {
-            await setLoading(true);
-            await setProgress(0);
+        if (base64ImgUpload && fileError===false) {
+            setLoading(true);
+            setProgress(0);
 
             const timer = setInterval(() => {
                 setProgress((p) => (p < 90 ? p + 10 : p))
             }, 300);
 
             const body = {
-                timestamp_ms: await Date.now(),
+                timestamp_ms: Date.now(),
                 base64: base64ImgUpload
             }
 
@@ -208,17 +219,16 @@ function UploadPhoto() {
                 }
             }
 
-            const url = await `${api_base_url}/analyze`;
+            const url = `${api_base_url}/analyze`;
 
             try {
                 const request = await fetch(url, options);
                 const response = await request.json();
-                const data = await JSON.parse(response);
-                await setAnalysisResult(data);
+                setAnalysisResult(response);
 
             } catch (e) {
-                await console.error(e)
-                await setApiError(e.message)
+                console.error(e)
+                setApiError(e.message)
             } finally {
                 await clearInterval(timer)
                 await setLoading(false);

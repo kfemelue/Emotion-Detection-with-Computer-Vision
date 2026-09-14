@@ -5,7 +5,7 @@ A Javascript Vite+React Web application with a Python FastAPI server that uses t
 
 ## Objective
 
-This application is to create a simple web interface in which users can upload a photo of their choice, and have that photo be analyzed by an AI model. 
+This application is to create a simple web interface in which users can upload a photo of their choice, and have that photo be analyzed by the py-feat CV inference model. 
 
 
 ## Stack

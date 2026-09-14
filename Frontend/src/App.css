@@ -4,7 +4,6 @@ body {
   background-color:aliceblue;
 }
 
-/* File input */
 #upload-container {
   width: auto;
   height: auto;
@@ -17,7 +16,6 @@ body {
   font-family: 'Tahoma';
 }
 
-/* Analysis Results */
 #results-header {}
 
 #header {

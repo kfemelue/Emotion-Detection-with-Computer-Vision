@@ -14,7 +14,7 @@ python -m venv env
 # please be sure to start your virtual environment before running the install command
 
 
-pip install -r requirements.txt
+pip install -r requirements.txt --only-binary :all:
 ```
 
 3. Create a .env file in the `Backend/` directory. It should be based on .env.example or the code block below. Fill in your desired port number and CORS origins.
