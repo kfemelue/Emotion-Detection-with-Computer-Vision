@@ -17,10 +17,10 @@ This application is to create a simple web interface in which users can upload a
 
 Instructions to run the application locally, and dev environment requirements can be found in the README file for each application component.
 
-[Frontend README](https://github.com/kfemelue/Emotion-Detection-with-Computer-Vision/blob/main/Frontend/README.md)
+[Frontend README](https://github.com/kfemelue/Emotion-Detection-with-Computer-Vision/blob/main/frontend/README.md)
 
 
-[Backend README](https://github.com/kfemelue/Emotion-Detection-with-Computer-Vision/blob/main/Backend/README.md)
+[Backend README](https://github.com/kfemelue/Emotion-Detection-with-Computer-Vision/blob/main/backend/README.md)
 
 
 ## Sample Results

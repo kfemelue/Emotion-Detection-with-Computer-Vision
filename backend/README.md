@@ -2,7 +2,7 @@
 
 To run locally:
 
-1. cd into the `Backend` directory.
+1. cd into the `backend` directory.
 
 2. Create a python virtual env and install the dependencies from the `requirements.txt` file.
 
@@ -15,7 +15,7 @@ python -m venv env
 pip install -r requirements.txt --only-binary :all:
 ```
 
-3. Create a .env file in the `Backend/` directory. It should be based on .env.example or the code block below. Fill in your desired port number and CORS origins.
+3. Create a .env file in the `backend/` directory. It should be based on .env.example or the code block below. Fill in your desired port number and CORS origins.
 
 ```
 PYTHON_VERSION=3.13
@@ -35,9 +35,9 @@ ORIGINS='["http://localhost", "*"]'
 
 To run the app with Docker:
 
-1. `cd Backend`
+1. `cd backend`
 2. `docker build .`
-3. Create a .env file in the Backend directory:
+3. Create a .env file in the backend directory:
 
 ```
 PORT=8000

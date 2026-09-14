@@ -3,5 +3,5 @@ node_modules/
 env/
 .env
 .DS_Store
-Frontend/package-lock.json
-Frontend/node_modules/
+frontend/package-lock.json
+frontend/node_modules/
