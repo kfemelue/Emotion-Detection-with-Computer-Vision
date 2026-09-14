@@ -26,3 +26,4 @@ dist-ssr
 idea
 
 .env
+package-lock.json
