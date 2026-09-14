@@ -17,11 +17,11 @@ pip install -r requirements.txt --only-binary :all:
 
 3. Create a .env file in the `Backend/` directory. It should be based on .env.example or the code block below. Fill in your desired port number and CORS origins.
 
-```commandline
+```
 PYTHON_VERSION=3.13
 PORT=3000
 # CORS origins
-ORIGINS=["http://localhost", "*"]
+ORIGINS='["http://localhost", "*"]'
 
 ```
 
@@ -30,3 +30,19 @@ ORIGINS=["http://localhost", "*"]
 ```commandline
  python -m uvicorn api.main:app --reload --port 3000
 ```
+
+---
+
+To run the app with Docker:
+
+1. `cd Backend`
+2. `docker build .`
+3. Create a .env file in the Backend directory:
+
+```
+PORT=3000
+# CORS origins
+ORIGINS='["http://localhost", "*"]'
+```
+
+4. `docker run -p 8000:8000  --env-file ./.env <YOUR BUILD ID>`
