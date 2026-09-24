@@ -15,3 +15,5 @@ class EmotionPredictor:
         emotions_dict = (predictions[["anger", "disgust", "fear", "happiness", "sadness", "surprise", "neutral"]]
                          .to_dict(orient='records'))
         return emotions_dict
+
+# TODO: Upgrade Detectorv1 to Detectorv2
